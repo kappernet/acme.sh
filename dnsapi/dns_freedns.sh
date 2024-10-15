@@ -1,14 +1,15 @@
 #!/usr/bin/env sh
+# shellcheck disable=SC2034
+dns_freedns_info='FreeDNS
+Site: FreeDNS.afraid.org
+Docs: github.com/acmesh-official/acme.sh/wiki/dnsapi#dns_freedns
+Options:
+ FREEDNS_User Username
+ FREEDNS_Password Password
+Issues: github.com/acmesh-official/acme.sh/issues/2305
+Author: David Kerr <https://github.com/dkerr64>
+'
 
-#This file name is "dns_freedns.sh"
-#So, here must be a method dns_freedns_add()
-#Which will be called by acme.sh to add the txt record to your api system.
-#returns 0 means success, otherwise error.
-#
-#Author: David Kerr
-#Report Bugs here: https://github.com/dkerr64/acme.sh
-#or here... https://github.com/acmesh-official/acme.sh/issues/2305
-#
 ########  Public functions #####################
 
 # Export FreeDNS userid and password in following variables...
@@ -303,10 +304,10 @@ _freedns_domain_id() {
       return 1
     fi
 
-    domain_id="$(echo "$htmlpage" | tr -d " \t\r\n\v\f" | sed 's/<tr>/@<tr>/g' | tr '@' '\n' \
-      | grep "<td>$search_domain</td>\|<td>$search_domain(.*)</td>" \
-      | sed -n 's/.*\(edit\.php?edit_domain_id=[0-9a-zA-Z]*\).*/\1/p' \
-      | cut -d = -f 2)"
+    domain_id="$(echo "$htmlpage" | tr -d " \t\r\n\v\f" | sed 's/<tr>/@<tr>/g' | tr '@' '\n' |
+      grep "<td>$search_domain</td>\|<td>$search_domain(.*)</td>" |
+      sed -n 's/.*\(edit\.php?edit_domain_id=[0-9a-zA-Z]*\).*/\1/p' |
+      cut -d = -f 2)"
     # The above beauty extracts domain ID from the html page...
     # strip out all blank space and new lines. Then insert newlines
     # before each table row <tr>
@@ -349,11 +350,11 @@ _freedns_data_id() {
       return 1
     fi
 
-    data_id="$(echo "$htmlpage" | tr -d " \t\r\n\v\f" | sed 's/<tr>/@<tr>/g' | tr '@' '\n' \
-      | grep "<td[a-zA-Z=#]*>$record_type</td>" \
-      | grep "<ahref.*>$search_domain</a>" \
-      | sed -n 's/.*\(edit\.php?data_id=[0-9a-zA-Z]*\).*/\1/p' \
-      | cut -d = -f 2)"
+    data_id="$(echo "$htmlpage" | tr -d " \t\r\n\v\f" | sed 's/<tr>/@<tr>/g' | tr '@' '\n' |
+      grep "<td[a-zA-Z=#]*>$record_type</td>" |
+      grep "<ahref.*>$search_domain</a>" |
+      sed -n 's/.*\(edit\.php?data_id=[0-9a-zA-Z]*\).*/\1/p' |
+      cut -d = -f 2)"
     # The above beauty extracts data ID from the html page...
     # strip out all blank space and new lines. Then insert newlines
     # before each table row <tr>

@@ -1,40 +1,34 @@
 #!/usr/bin/env sh
-
-########
-# Custom cyon.ch DNS API for use with [acme.sh](https://github.com/acmesh-official/acme.sh)
-#
-# Usage: acme.sh --issue --dns dns_cyon -d www.domain.com
-#
-# Dependencies:
-# -------------
-# - oathtool (When using 2 Factor Authentication)
-#
-# Issues:
-# -------
-# Any issues / questions / suggestions can be posted here:
-# https://github.com/noplanman/cyon-api/issues
-#
-# Author: Armando Lüscher <armando@noplanman.ch>
-########
+# shellcheck disable=SC2034
+dns_cyon_info='cyon.ch
+Site: cyon.ch
+Docs: github.com/acmesh-official/acme.sh/wiki/dnsapi#dns_cyon
+Options:
+ CY_Username Username
+ CY_Password API Token
+ CY_OTP_Secret OTP token. Only required if using 2FA
+Issues: github.com/noplanman/cyon-api/issues
+Author: Armando Lüscher <armando@noplanman.ch>
+'
 
 dns_cyon_add() {
-  _cyon_load_credentials \
-    && _cyon_load_parameters "$@" \
-    && _cyon_print_header "add" \
-    && _cyon_login \
-    && _cyon_change_domain_env \
-    && _cyon_add_txt \
-    && _cyon_logout
+  _cyon_load_credentials &&
+    _cyon_load_parameters "$@" &&
+    _cyon_print_header "add" &&
+    _cyon_login &&
+    _cyon_change_domain_env &&
+    _cyon_add_txt &&
+    _cyon_logout
 }
 
 dns_cyon_rm() {
-  _cyon_load_credentials \
-    && _cyon_load_parameters "$@" \
-    && _cyon_print_header "delete" \
-    && _cyon_login \
-    && _cyon_change_domain_env \
-    && _cyon_delete_txt \
-    && _cyon_logout
+  _cyon_load_credentials &&
+    _cyon_load_parameters "$@" &&
+    _cyon_print_header "delete" &&
+    _cyon_login &&
+    _cyon_change_domain_env &&
+    _cyon_delete_txt &&
+    _cyon_logout
 }
 
 #########################
@@ -44,7 +38,7 @@ dns_cyon_rm() {
 _cyon_load_credentials() {
   # Convert loaded password to/from base64 as needed.
   if [ "${CY_Password_B64}" ]; then
-    CY_Password="$(printf "%s" "${CY_Password_B64}" | _dbase64 "multiline")"
+    CY_Password="$(printf "%s" "${CY_Password_B64}" | _dbase64)"
   elif [ "${CY_Password}" ]; then
     CY_Password_B64="$(printf "%s" "${CY_Password}" | _base64)"
   fi
